@@ -5,6 +5,7 @@ import { connect } from "mongoose";
 import { PORT, DB } from "./config";
 
 // routes
+import auth from "./routes/api/auth";
 import users from "./routes/api/users";
 import boards from "./routes/api/boards";
 import items from "./routes/api/items";
@@ -30,6 +31,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use("/auth", auth);
 app.use("/users", users);
 app.use("/boards", boards);
 app.use("/items", items);

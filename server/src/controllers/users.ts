@@ -53,6 +53,13 @@ export const createUser = async (req: Request, res: Response) => {
   const { username, password, email, name } = req.body;
 
   try {
+    const user = await User.findOne({ username: username });
+    if (user) {
+      res.status(400).json({
+        msg: "duplicate username",
+      });
+      return;
+    }
     // new user profile
     const newProfile = await new Profile({
       email : email,
