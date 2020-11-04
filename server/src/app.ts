@@ -6,6 +6,8 @@ import { PORT, DB } from "./config";
 
 // routes
 import users from "./routes/api/users";
+import boards from "./routes/api/boards";
+import items from "./routes/api/items";
 
 const app: Application = express();
 
@@ -29,5 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/users", users);
+app.use("/boards", boards);
+app.use("/items", items);
  
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
