@@ -6,7 +6,27 @@ import { SECRET } from "../config";
 // models
 import User, { IUser } from "../models/User";
 
-export default async (req: Request, res: Response) => {
+export const checkauth = async (req: any, res: Response) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (user) {
+      res.status(200).json({
+        msg: "ok",
+        body: user,
+      });
+    } else {
+      res.status(404).json({
+        msg: "user does not exist",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      msg: err.message, 
+    });
+  }
+}
+
+export const login =  async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
