@@ -1,0 +1,12 @@
+version: '3'
+services:
+  server:
+    container_name: docker-server
+    restart: always
+    build: ./server
+  client:
+    container_name: docker-client
+    restart: always
+    build: ./client
+    ports:
+      - '80:3000'
