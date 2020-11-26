@@ -4,8 +4,6 @@ export interface IItem extends Document {
   board_id    : string,
   des         : string,
   group_by    : string,
-  likes       : number,
-  comments    : Array<string>,
 }
 
 const ItemSchema: Schema = new Schema({
@@ -24,13 +22,6 @@ const ItemSchema: Schema = new Schema({
     enum      : ["went_well", "to_improve", "action_items"],
     required  : true,
   },
-  likes: {
-    type      : Number,
-    default   : 0,
-  },
-  comments: [{ 
-    type      : String,
-  }],
 });
 
 export default model<IItem>("item", ItemSchema);

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useContext } from 'react';
 import {
   Avatar,
   Button,
@@ -15,10 +15,14 @@ import {
   EventNote,
 } from '@material-ui/icons';
 import { withRouter } from 'react-router-dom';
+import loaduser from '../utils/loaduser';
+import register from '../utils/register';
+import UserContext from '../contexts/UserContext';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(15),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -36,8 +40,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const initNewUserState = {
+  username: "",
+  password: "",
+  fullname: "",
+};
+const initAlertState = {
+  visible: false,
+  serverity: "",
+  msg: "",
+};
+
 const SignUp = (props) => {
+  const [newUser, setNewUser] = useState(initNewUserState);
+  const [alert, setAlert] = useState(initAlertState);
+  const {userContext, setUserContext} = useContext(UserContext);
   const classes = useStyles();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    (async () => {
+      const { status, msg } = await register(newUser);
+      if (status) {
+        const { success, user, token } = await loaduser();
+        if (success) {
+          setUserContext({
+            ...userContext,
+            isAuthenticated: success,
+            user,
+            token
+          });
+          props.history.replace("/");
+        }
+      } else {
+        setAlert({
+          ...alert,
+          visible: true,
+          serverity: "error",
+          msg
+        });
+      }
+    })();
+  }
+
+  const handleUsernameChange = (e) => {
+    setNewUser({ ...newUser, username: e.target.value });
+    setAlert(initAlertState);
+  }
+
+  const handlePasswordChange = (e) => {
+    setNewUser({ ...newUser, password: e.target.value });
+    setAlert(initAlertState);
+  }
+
+  const handleFullnameChange = (e) => {
+    setNewUser({ ...newUser, fullname: e.target.value });
+    setAlert(initAlertState);
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -49,7 +108,7 @@ const SignUp = (props) => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSignUp}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -60,6 +119,7 @@ const SignUp = (props) => {
             name="full_name"
             autoComplete="full_name"
             autoFocus
+            onChange={handleFullnameChange}
           />
           <TextField
             variant="outlined"
@@ -71,6 +131,7 @@ const SignUp = (props) => {
             name="username"
             autoComplete="username"
             autoFocus
+            onChange={handleUsernameChange}
           />
           <TextField
             variant="outlined"
@@ -82,6 +143,7 @@ const SignUp = (props) => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={handlePasswordChange}
           />
           <Button
             type="submit"
@@ -94,7 +156,7 @@ const SignUp = (props) => {
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Button variant="body2" onClick={props.history.goBack}>
+              <Button variant="text" onClick={props.history.goBack}>
                 <Avatar className={classes.avatar}>
                   <ArrowBack />
                 </Avatar>
@@ -104,6 +166,13 @@ const SignUp = (props) => {
           </Grid>
         </form>
       </div>
+      <br />
+      { alert.visible ?
+        <Alert variant="filled" severity={alert.serverity}>
+          Alert: {alert.msg}
+        </Alert>
+        : ""
+      }
     </Container>
   );
 }

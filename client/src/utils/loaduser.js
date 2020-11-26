@@ -3,6 +3,13 @@ import axios from 'axios';
 const loaduser = async () => {
   try {
     const token = localStorage.getItem("token") || null;
+    if (!token) {
+      return {
+        success: false,
+        user: null,
+        token: null,
+      };
+    }
     const res = await axios.get("http://localhost:8000/auth", {
       headers: {
         "x-auth-token": token,

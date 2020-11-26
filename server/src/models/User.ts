@@ -3,7 +3,7 @@ import { model, Document, Schema, SchemaTypes } from "mongoose";
 export interface IUser extends Document {
   username    : string,
   password    : string,
-  profile_id? : string,
+  fullname    : string,
 }
 
 const UserSchema: Schema = new Schema({
@@ -18,9 +18,9 @@ const UserSchema: Schema = new Schema({
     type      : String,
     required  : true,
   },
-  profile_id: {
-    type      : SchemaTypes.ObjectId,
-    ref       : "profile",
+  fullname: {
+    type      : String,
+    trim      : true,
     required  : true,
   }
 });

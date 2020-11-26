@@ -8,6 +8,8 @@ import {
   getBoards, 
   getBoardById, 
   createBoard,
+  updateBoardById,
+  deleteBoardById,
 } from "../../controllers/boards";
 
 const router = Router();
@@ -17,6 +19,8 @@ router.route("/")
   .post(auth, createBoard);
 
 router.route("/:id")
-  .get(auth, getBoardById);
+  .get(auth, getBoardById)
+  .put(auth, updateBoardById)
+  .delete(auth, deleteBoardById);
 
 export default router;

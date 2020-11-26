@@ -19,7 +19,7 @@ import loaduser from '../utils/loaduser';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(15),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -52,7 +52,6 @@ const initAlertState = {
 const SignIn = (props) => {
   const [user, setUser] = useState(initUserState);
   const [alert, setAlert] = useState(initAlertState);
-  const [abc, setAbc] = useState("....dsdsd/...");
   const { userContext, setUserContext } = useContext(UserContext);
 
 
@@ -64,7 +63,6 @@ const SignIn = (props) => {
       const { status, msg } = await login(user);
       if (status) {
         const { success, user, token } = await loaduser();
-        console.log(status);
         if (success) {
           setUserContext({
             ...userContext,

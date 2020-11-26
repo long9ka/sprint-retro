@@ -8,13 +8,15 @@ import {
   getUsers,
   getUserById,
   createUser,
+  updateUser,
 } from "../../controllers/users";
 
 const router = Router();
 
 router.route("/")
   .get(auth, getUsers)
-  .post(createUser);
+  .post(createUser)
+  .put(auth, updateUser);
 
 router.route("/:id")
   .get(auth, getUserById);

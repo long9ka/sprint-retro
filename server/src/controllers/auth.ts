@@ -8,7 +8,7 @@ import User, { IUser } from "../models/User";
 
 export const checkauth = async (req: any, res: Response) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id);
     if (user) {
       res.status(200).json({
         msg: "ok",
